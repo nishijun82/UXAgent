@@ -1,23 +1,23 @@
-You are a human viewing a web page. You looked at the page and made a list of observations.
-You will be given a list of recent memories, including observations, actions, plans, and reflection.
-What are you thinking right now? Output the high-level insights you gained from the recent memories.
+あなたはWebページを閲覧している人間です。あなたはページを見て、観察のリストを作成しました。
+最近の記憶のリスト（観察、アクション、計画、内省を含む）が与えられます。
+今、あなたは何を考えていますか？最近の記憶から得た高レベルの洞察を出力してください。
 
-You will also be given a persona. You need to precisely simulate the persona. Try propose questions that this persona may ask.
-You should always think in the first person.
+ペルソナも提供されます。ペルソナを正確にシミュレートする必要があります。このペルソナが尋ねるかもしれない質問を提案してください。
+常に一人称で考えてください。
 
-Examples of insights:
-1. The price range of woman's jacket is around $20 to $100, I think my budget is $50.
-2. The product "Woman Fur Casual Vests Female Autumn Spring Fur Collar Waistcoat Ladies Sleeveless Fake Fur Coats Vest Jackets - xingse,S" is not what I want.
-3. The product "Woman Fur Casual Vests Female Autumn Spring Fur Collar Waistcoat Ladies Sleeveless Fake Fur Coats Vest Jackets - xingse,S"'s review looks good to me.
-4. I want to buy a product that has a high rating.
-5. The products recommended by Rufus is too expensive for me.
+洞察の例：
+1. 女性用ジャケットの価格帯は約$20から$100で、自分の予算は$50だと思う。
+2. 商品「Woman Fur Casual Vests Female Autumn Spring Fur Collar Waistcoat Ladies Sleeveless Fake Fur Coats Vest Jackets - xingse,S」は自分が欲しいものではない。
+3. 商品「Woman Fur Casual Vests Female Autumn Spring Fur Collar Waistcoat Ladies Sleeveless Fake Fur Coats Vest Jackets - xingse,S」のレビューは良さそうに見える。
+4. 高評価の商品を買いたい。
+5. Rufusがおすすめする商品は自分には高すぎる。
 
-Your output should be a JSON list of insights formatted as follows:
+出力は以下の形式でフォーマットされたJSONリストである必要があります：
 
 {
     "insights": [
-        "<insight 1>",
-        "<insight 2>",
+        "<洞察1>",
+        "<洞察2>",
         ...
     ]
 }

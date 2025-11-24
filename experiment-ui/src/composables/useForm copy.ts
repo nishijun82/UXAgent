@@ -6,31 +6,31 @@ export function getWizardDefaults(): WizardForm {
   return {
     persona: {
       numSubjects: 20,
-      generalIntent: 'ジャケットを購入する',
-      examplePersona: `ペルソナ: Clara
-背景:
-Claraは名門大学でコンピュータサイエンスの博士課程に在籍する学生です。人工知能と機械学習に焦点を当てた研究に深く携わっており、社会に貢献できる技術の進歩に寄与することを目指しています。
+      generalIntent: 'Buy a jacket',
+      examplePersona: `Persona: Clara
+Background:
+Clara is a PhD student in Computer Science at a prestigious university. She is deeply engaged in research focusing on artificial intelligence and machine learning, aiming to contribute to advancements in technology that can benefit society.
 
-人口統計学的情報:
+Demographics:
 
-年齢: 28歳
-性別: 女性
-学歴: コンピュータサイエンスの博士課程在籍中
-職業: 博士課程学生
-収入: $50,000
+Age: 28
+Gender: Female
+Education: Pursuing a PhD in Computer Science
+Profession: PhD student
+Income: $50,000
 
-経済状況:
-Claraは博士課程学生としての奨学金で生活しており、支出には慎重です。研究関連の費用のためにお金を貯め、学問的追求に投資することを好みます。
+Financial Situation:
+Clara lives on her stipend as a PhD student and is careful with her spending. She prefers to save money for research-related expenses and invest in her academic pursuits.
 
-買い物習慣:
-Claraは買い物が嫌いで、商品を閲覧することに多くの時間を費やすことを避けます。彼女は簡潔で効率的なショッピング体験を好み、利便性のためにオンラインでよく買い物をします。買い物をする時は、スタイルやトレンディさよりも実用性と手頃な価格を求めます。
-そのため、Claraは迅速かつ効率的に買い物をしたいと考えています。
+Shopping Habits:
+Clara dislikes shopping and avoids spending much time browsing through products. She prefers straightforward, efficient shopping experiences and often shops online for convenience. When she does shop, she looks for practicality and affordability over style or trendiness.
+So Clara wants to shop QUICKLY and EFFICIENTLY.
 
-職業生活:
-Claraは学術活動にほとんどの時間を費やし、会議に出席し、研究室で作業し、論文を執筆しています。研究への献身が彼女の主な優先事項であり、学術的責任を中心に時間を管理しています。
+Professional Life:
+Clara spends most of her time in academia, attending conferences, working in the lab, and writing papers. Her commitment to her research is her main priority, and she manages her time around her academic responsibilities.
 
-個人的なスタイル:
-Claraは快適で機能的な衣服を好み、デスクや研究室で長時間着用するのに適したアイテムをよく選びます。彼女はMサイズの衣服を着用し、自分の個性を反映する色を好みます—主に赤色で、これが気分を高揚させ、エネルギーを与えてくれると感じています。`,
+Personal Style:
+Clara prefers comfortable, functional clothing, often choosing items that are easy to wear for long hours spent at her desk or in the lab. She wears medium-sized clothing and likes colors that reflect her personality—mostly red, which she finds uplifting and energizing.`,
       demographics: [
         {
           name: 'Age',
@@ -41,17 +41,17 @@ Claraは快適で機能的な衣服を好み、デスクや研究室で長時間
         {
           name: 'Gender',
           choices: [
-            { name: '男性', weight: 1 },
-            { name: '女性', weight: 1 },
-            { name: 'ノンバイナリー', weight: 1 },
+            { name: 'Male', weight: 1 },
+            { name: 'Female', weight: 1 },
+            { name: 'Non-binary', weight: 1 },
           ]
         },
         {
           name: "Online Shopping Frequency",
           choices: [
-            { name: '年に数回', weight: 1 },
-            { name: '選択肢2', weight: 1 },
-            { name: '選択肢3', weight: 1 },
+            { name: 'A few times per year', weight: 1 },
+            { name: 'option 2', weight: 1 },
+            { name: 'option 3', weight: 1 },
           ]
         },
       ]
@@ -106,7 +106,7 @@ export type RunPayload = {
 }
 
 export function buildRunPayload(form: WizardForm): RunPayload {
-  // アンケート文字列をオブジェクトに解析
+  // parse questionnaire string to object
   let questionnaireObj: any = {}
   try { questionnaireObj = JSON.parse(form?.survey?.questionnaire ?? '{}') } catch { questionnaireObj = {} }
 
@@ -120,7 +120,7 @@ export function buildRunPayload(form: WizardForm): RunPayload {
       })) : []
     })),
     general_intent: String(form?.persona?.generalIntent ?? ''),
-    // 有効で空でない場合のみ条件付きで含める
+    // Conditionally include only when enabled and non-empty
     ...(form?.persona?.useExamplePersona ? { example_persona: form?.persona?.examplePersona } :
         {example_persona: ''}),
     start_url:      String(form?.experiment?.startUrl ?? ''),
@@ -139,9 +139,9 @@ export async function submitWizardForm(form: WizardForm) {
     body: JSON.stringify(payload)
   })
   if (!res.ok) {
-    // サーバーのエラー本文を表示してデバッグに役立てる（400は不足しているフィールドを示す）
+    // surface server’s error body to help you debug (400 shows missing fields)
     const text = await res.text()
-    throw new Error(`送信に失敗しました: ${res.status} ${text}`)
+    throw new Error(`Submit failed: ${res.status} ${text}`)
   }
   return await res.json()
 }

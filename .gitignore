@@ -142,3 +142,6 @@ old_data
 *.zip
 
 *.mp4
+
+commit_*.txt
+

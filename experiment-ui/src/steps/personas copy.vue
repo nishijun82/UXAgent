@@ -2,15 +2,15 @@
   <n-card>
     <n-form ref="formRef" :model="form">
       <!-- ===================== META (count + intent) ===================== -->
-      <n-divider style="margin-top: 0">募集対象の設定</n-divider>
+      <n-divider style="margin-top: 0">Recruitment Target Setting</n-divider>
       <div class="meta">
         <div class="form-row">
           <n-form-item
-            label="テスト対象のWebサイトURL"
+            label="URL of website being tested"
             :path="`experiment.startUrl`"
             :rule="{
               required: true,
-              message: 'URLを入力してください',
+              message: 'Please enter a URL',
             }"
           >
             <n-input
@@ -23,11 +23,11 @@
 
         <div class="form-row">
           <n-form-item
-            label="参加者数"
+            label="Number of Participants"
             :path="`persona.numSubjects`"
             :rule="{
               required: true,
-              message: '参加者数を入力してください',
+              message: 'Please input the number of participants',
             }"
           >
             <n-input-number
@@ -35,48 +35,48 @@
               :min="1"
               :step="1"
               class="narrow"
-              placeholder="例: 15"
+              placeholder="e.g., 15"
             />
           </n-form-item>
         </div>
 
         <div class="form-row">
           <n-form-item
-            label="参加者のタスク"
+            label="Participant Task"
             :path="`persona.generalIntent`"
             :rule="{
               required: true,
-              message: '参加者のタスクを入力してください',
+              message: 'Please input the participant task',
             }"
           >
             <n-input
               v-model:value="form.persona!.generalIntent"
               class="wide"
-              placeholder="例: 室内用バレーボールを購入する"
+              placeholder="e.g., Purchase an indoor volleyball"
             />
           </n-form-item>
         </div>
 
         <div class="field full">
           <n-form-item
-            label="ペルソナの例"
+            label="Example Persona"
             :path="`persona.examplePersona`"
             :rule="{
               required: true,
-              message: 'ペルソナの例を入力してください',
+              message: 'Please input the example persona',
             }"
           >
             <n-input
               type="textarea"
               v-model:value="form.persona!.examplePersona"
               class="wide"
-              placeholder="フォーマット参照として使用されるペルソナの例を入力してください。生成されるペルソナは同じフォーマットに従います。"
+              placeholder="Input an example persona that is used as format reference. Generated personas will follow the same format."
             />
           </n-form-item>
         </div>
       </div>
 
-      <n-divider>人口統計学的情報</n-divider>
+      <n-divider>Demographics</n-divider>
 
       <!-- Empty state -->
       <n-alert
@@ -84,7 +84,7 @@
         type="info"
         class="mb-2"
       >
-        まだ人口統計学的フィールドがありません。
+        No demographic fields yet.
       </n-alert>
 
       <!-- Fields list -->
@@ -96,10 +96,10 @@
         >
           <div class="field-header">
             <div class="field-name">
-              <label class="form-label">フィールド名</label>
+              <label class="form-label">Field Name</label>
               <n-input
                 v-model:value="field.name"
-                placeholder="例: 年齢、性別、収入、職業など"
+                placeholder="e.g., Age, Gender, Income, Occupation, etc."
                 @focus="(e: FocusEvent) => selectAll(e)"
               />
             </div>
@@ -108,10 +108,10 @@
           <!-- Choices -->
           <div class="choices">
             <div class="choice header">
-              <div class="col label">値</div>
-              <div class="col weight">重み</div>
+              <div class="col label">Value</div>
+              <div class="col weight">Weight</div>
               <!--            <div class="col pct">%</div>-->
-              <div class="col actions">アクション</div>
+              <div class="col actions">Actions</div>
             </div>
 
             <div
@@ -122,7 +122,7 @@
               <div class="col label">
                 <n-input
                   v-model:value="choice.name"
-                  placeholder="例: 18-24、男性"
+                  placeholder="e.g., 18-24, Male"
                   @focus="(e: FocusEvent) => selectAll(e)"
                 />
               </div>
@@ -141,10 +141,10 @@
                       <template #icon
                         ><n-icon><MdTrash /></n-icon
                       ></template>
-                      値を削除
+                      Remove Value
                     </n-button>
                   </template>
-                  {{ choice.name || "この選択肢" }}を削除しますか？
+                  Remove {{ choice.name || "this choice" }}?
                 </n-popconfirm>
               </div>
             </div>
@@ -155,7 +155,7 @@
               <template #icon
                 ><n-icon><MdAdd /></n-icon
               ></template>
-              選択肢を追加</n-button
+              Add Choice</n-button
             >
 
             <n-popconfirm @positive-click="removeField(fi)">
@@ -164,10 +164,10 @@
                   <template #icon
                     ><n-icon><MdTrash /></n-icon
                   ></template>
-                  フィールドを削除
+                  Remove Field
                 </n-button>
               </template>
-              {{ field.name || "このフィールド" }}を削除しますか？
+              Remove {{ field.name || "this field" }}?
             </n-popconfirm>
           </div>
         </n-card>
@@ -180,7 +180,7 @@
             <template #icon
               ><n-icon><MdAdd /></n-icon
             ></template>
-            フィールドを追加</n-button
+            Add Field</n-button
           >
         </div>
       </div></n-form
@@ -190,11 +190,11 @@
     <template #action>
       <div class="card-nav">
         <n-button type="error" @click="handleReset" secondary
-          >フォームをリセット</n-button
+          >Reset Form</n-button
         >
         <div class="space"></div>
         <n-button type="primary" @click="handleNext">
-          次へ <n-icon><MdArrowRoundForward /></n-icon>
+          Next <n-icon><MdArrowRoundForward /></n-icon>
         </n-button>
       </div>
     </template>
@@ -216,7 +216,7 @@ const formRef = ref<FormInst | null>(null);
 const pendingByChoiceId = new Map<string, number | null>();
 
 function urlValidator(_: any, value: string) {
-  if (!value) return new Error("URLを入力してください");
+  if (!value) return new Error("Please enter a URL");
   try {
     // Allow missing protocol by attempting to prepend https:// for check
     const hasProtocol = /^(https?:)\/\//i.test(value);
@@ -224,7 +224,7 @@ function urlValidator(_: any, value: string) {
     new URL(hasProtocol ? value : `https://${value}`);
     return true;
   } catch {
-    return new Error("有効なURLを入力してください");
+    return new Error("Please enter a valid URL");
   }
 }
 

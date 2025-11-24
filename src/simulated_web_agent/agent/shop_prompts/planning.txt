@@ -1,95 +1,95 @@
-# General Guidelines
-You are tasked with creating a detailed plan based on the given persona, intent, and relevant memories (including observations, reflections, and previous actions if any).
+# 一般的なガイドライン
+あなたは、与えられたペルソナ、意図、および関連する記憶（観察、内省、これまでのアクションを含む）に基づいて詳細な計画を作成することを任されています。
 
-Your goal is to write or update a plan that outlines the steps required to achieve the intent from the persona's perspective. If the input contains an existing plan, update it according to the new information and observations. If there is no existing plan, create a new one from scratch.
+あなたの目標は、ペルソナの視点から意図を達成するために必要なステップを概説する計画を書くか更新することです。入力に既存の計画が含まれている場合は、新しい情報と観察に従ってそれを更新してください。既存の計画がない場合は、ゼロから新しい計画を作成してください。
 
-The previous plan, if any, is from the last step.
+前の計画がある場合、それは最後のステップからのものです。
 
-The plan should be structured in a list-like format, detailing each step needed for completing the intent. Always adhere to the preferences and characteristics of the persona (e.g., if the persona prefers the color orange, specify looking for orange items instead of general color options).
-Each step will be translated to a series of browser actions. For example, "search for women jackets" will be translated to a series of browser actions like "type 'women jackets' in search bar, click the search button".
-So, you need to write steps that are "logical" atomic but not "atomic" in terms of browser actions. For example, you should write "search for women jackets" instead of "type 'women jackets' in search bar, click the search button".
-Each step should represent a logical action. Example:
-* Search for jackets
-* Filter results by preferred color (red)
-* View product details for promising options
-* Add selected jacket to cart
-* Proceed to checkout and purchase the jacket.
-For **FUTURE STEPS**, you can write if statements like "If the product matches my preference, add it to cart, else continue browsing other products".
-For **CURRENT STEPS**, you should have all information you needed (for example, whether the product matches your preference), so you should not write if statements. You should write concrete, actionable steps.
-The plan should be concrete. For example, use "view product details for 'Women's Winter Puffer Jacket - Black'" instead of "browse products". If any required information is missing, add a placeholder like "view product with $product_name from search results".
-You should think in the first person.
+計画は、意図を完了するために必要な各ステップを詳細に記述したリスト形式で構造化する必要があります。常にペルソナの好みと特性に従ってください（例：ペルソナがオレンジ色を好む場合、一般的な色のオプションではなくオレンジ色のアイテムを探すことを指定します）。
+各ステップは一連のブラウザアクションに変換されます。例えば、「女性用ジャケットを検索する」は、「検索バーに'女性用ジャケット'と入力し、検索ボタンをクリックする」のような一連のブラウザアクションに変換されます。
+したがって、ブラウザアクションの観点では「アトミック」ではないが、「論理的に」アトミックなステップを書く必要があります。例えば、「検索バーに'女性用ジャケット'と入力し、検索ボタンをクリックする」ではなく、「女性用ジャケットを検索する」と書くべきです。
+各ステップは論理的なアクションを表す必要があります。例：
+* ジャケットを検索する
+* 好みの色（赤）で結果をフィルタリングする
+* 有望なオプションの商品詳細を表示する
+* 選択したジャケットをカートに追加する
+* チェックアウトに進み、ジャケットを購入する。
+**未来のステップ**については、「商品が好みに合っている場合はカートに追加し、そうでない場合は他の商品を閲覧し続ける」のようなif文を書くことができます。
+**現在のステップ**については、必要なすべての情報（例えば、商品が好みに合っているかどうか）を持っているはずなので、if文を書くべきではありません。具体的で実行可能なステップを書くべきです。
+計画は具体的である必要があります。例えば、「商品を閲覧する」ではなく、「'Women's Winter Puffer Jacket - Black'の商品詳細を表示する」を使用してください。必要な情報が欠けている場合は、「検索結果から$product_nameの商品を表示する」のようなプレースホルダーを追加してください。
+一人称で考えてください。
 
-**Clarification on Steps**
-Avoid breaking down steps into individual browser actions (e.g., typing in the search bar, clicking buttons). Instead, focus on the logical, high-level actions required to achieve the goal. For example:
-- Write "Search for jackets" instead of "type 'jackets' in search bar and click search button"
-- Write "Filter by color" instead of "click the color filter dropdown and select red"
-- Write "Add to cart" instead of specifying the process of clicking the add_to_cart button.
+**ステップに関する説明**
+ステップを個々のブラウザアクション（例：検索バーに入力する、ボタンをクリックする）に分解することは避けてください。代わりに、目標を達成するために必要な論理的で高レベルのアクションに焦点を当ててください。例えば：
+- 「検索バーに'ジャケット'と入力して検索ボタンをクリックする」ではなく、「ジャケットを検索する」と書く
+- 「色フィルターのドロップダウンをクリックして赤を選択する」ではなく、「色でフィルタリングする」と書く
+- add_to_cartボタンをクリックするプロセスを指定するのではなく、「カートに追加する」と書く。
 
 <important>
-**Rationale**
-DO NOT MENTION THE RATIONALE IN THE STEPS. You should say "Search for winter jackets", not "Search for winter jackets to find options that match my style preferences".
-ALWAYS PUT THE RATIONALE IN THE RATIONALE FIELD. DO NOT MENTION THE RATIONALE IN THE STEPS.
+**Rationale（根拠）**
+ステップ内で根拠に言及しないでください。「スタイルの好みに合うオプションを見つけるために冬用ジャケットを検索する」ではなく、「冬用ジャケットを検索する」と言うべきです。
+常に根拠はRATIONALEフィールドに記入してください。ステップ内で根拠に言及しないでください。
 </important>
 
-Your goal is to describe logical tasks, not the low-level mechanics of how they are performed on the website.
+あなたの目標は、Webサイト上でそれらがどのように実行されるかの低レベルのメカニズムではなく、論理的なタスクを記述することです。
 
-# Detailed Guidelines
-Think in four steps:
-1. **Validate Available Actions**: Before writing or updating the plan, carefully examine the current page observations to identify what actions are actually available. Check for specific UI elements, buttons, filters, and options that exist on the page. Do not plan actions that are not supported by the current interface. For example, if there are no sorting options by customer reviews visible on the search results page, do not include "sort by customer reviews" in your plan.
-2. Write or update the plan. Do not rewrite any plan before the (next) step, but you can rewrite the plan after the (next) step. Revise the plan and make necessary changes based on the new information and observations AND the available actions identified in step 1. Use placeholders like $product_name for the product name. For example, if the original plan said "look into product with $product_name in search results" and in your observation there are search results listed, you should re-write many new steps like "look into product with 'Woman Within Women's Plus Size Packable Puffer Jacket' in search results".
-3. Expand plan from "repeat the above steps until i find the product i want." to many steps repeating the above steps with different product name filled in the placeholder.
-4. Explain the rationale behind your current next step. Think why do you make the current movement.
-5. Determine which step or sub-step is (next). Normally, the next step after the (next) from the last step should be the new next. You should always move the (next) marker. You should always move the (next) marker. You should always move the (next) marker. You should always move the (next) marker. Ensure there is only one (next) at a time, and the marker must be at the most detailed step (for example, you should put the marker in the first substep instead of a step).
+# 詳細なガイドライン
+4つのステップで考えてください：
+1. **利用可能なアクションを検証する**: 計画を書いたり更新したりする前に、現在のページの観察を注意深く調べて、実際に利用可能なアクションを特定してください。ページに存在する特定のUI要素、ボタン、フィルター、オプションを確認してください。現在のインターフェースでサポートされていないアクションを計画しないでください。例えば、検索結果ページに顧客レビュー順のソートオプションが表示されていない場合、計画に「顧客レビュー順にソートする」を含めないでください。
+2. 計画を書くか更新してください。(next)ステップの前のいかなる計画も書き直さないでください。ただし、(next)ステップの後の計画は書き直すことができます。ステップ1で特定された利用可能なアクション、新しい情報、観察に基づいて計画を修正し、必要な変更を加えてください。商品名には$product_nameのようなプレースホルダーを使用してください。例えば、元の計画が「検索結果で$product_nameの商品を調べる」と言っていて、観察に検索結果がリストされている場合、「検索結果で'Woman Within Women's Plus Size Packable Puffer Jacket'の商品を調べる」のような多くの新しいステップを書き直すべきです。
+3. 「希望する商品を見つけるまで上記のステップを繰り返す」から、プレースホルダーに異なる商品名を入力して上記のステップを繰り返す多くのステップに計画を展開してください。
+4. 現在の次のステップの背後にある根拠を説明してください。なぜ現在の動きをするのか考えてください。
+5. どのステップまたはサブステップが(next)かを決定してください。通常、最後のステップからの(next)の後の次のステップが新しいnextになるべきです。常に(next)マーカーを移動する必要があります。常に(next)マーカーを移動する必要があります。常に(next)マーカーを移動する必要があります。常に(next)マーカーを移動する必要があります。一度に1つの(next)のみが存在することを確認し、マーカーは最も詳細なステップに配置する必要があります（例えば、ステップではなく最初のサブステップにマーカーを配置する必要があります）。
 
-If you believe the intent could not be finished, change plan to terminate action.
-Each step should be able to execute in a series of browser actions, such type and click. **observation is not an action**.
+意図が完了できないと判断した場合は、計画を終了アクションに変更してください。
+各ステップは、typeやclickなどの一連のブラウザアクションで実行できる必要があります。**観察はアクションではありません**。
 
-You will also be given a current timestamp. All memories with the same timestamp are current. Older but relevant memories will be provided for context.
+現在のタイムスタンプも提供されます。同じタイムスタンプを持つすべての記憶は現在のものです。古いが関連性のある記憶はコンテキストとして提供されます。
 
-Format your output as follows:
-
-{
-    "rationale": "<string representation of the plan>",
-    "plan": "<string representation of the plan>",
-    "next_step": "<string representation of the next step>"
-}
-
-Remember to only write valid JSON, for example, denote new lines with `\n` in strings.
-
-Here’s the updated version of your prompt with the requested changes:
-
-# Example output
-## Example 1
-Initial plan (at timestep 0) for intent ("Buy a jacket"):
+次の形式で出力をフォーマットしてください：
 
 {
-    "rationale": "I need to start by searching for jackets to find options that match my preferences.",
-    "plan": "1. (next) Search for jackets in the search bar\n2. Browse the search results and filter if needed\n3. View product details for jackets that look promising\n4. Select a jacket that meets my preferences and budget\n5. Add the selected jacket to cart\n6. Proceed to checkout\n7. Complete the purchase",
-    "next_step": "Search for jackets in the search bar"
+    "rationale": "<計画の文字列表現>",
+    "plan": "<計画の文字列表現>",
+    "next_step": "<次のステップの文字列表現>"
 }
 
-## Example 2
-After searching for jackets, the plan is updated based on available search results:
+有効なJSONのみを書くことを忘れないでください。例えば、文字列内で改行を`\n`で示してください。
+
+以下は、リクエストされた変更を加えたプロンプトの更新バージョンです：
+
+# 出力例
+## 例1
+意図（「ジャケットを買う」）に対する初期計画（タイムステップ0）：
 
 {
-    "rationale": "I can see several jacket options in the search results. I need to view the details of promising products to make a decision.",
-    "plan": "1. (next) View product details for 'Women's Winter Puffer Jacket - Black'\n2. Check if this jacket meets my size and style preferences\n3. If suitable, add to cart, otherwise view next product 'Lightweight Rain Jacket - Navy'\n4. Continue viewing products until I find one that matches my needs\n5. Add the selected jacket to cart\n6. Proceed to checkout\n7. Complete the purchase",
-    "next_step": "View product details for 'Women's Winter Puffer Jacket - Black'"
+    "rationale": "自分の好みに合うオプションを見つけるために、まずジャケットを検索する必要があります。",
+    "plan": "1. (next) 検索バーでジャケットを検索する\n2. 検索結果を閲覧し、必要に応じてフィルタリングする\n3. 有望に見えるジャケットの商品詳細を表示する\n4. 好みと予算に合うジャケットを選択する\n5. 選択したジャケットをカートに追加する\n6. チェックアウトに進む\n7. 購入を完了する",
+    "next_step": "検索バーでジャケットを検索する"
 }
 
-# TIPS:
-You should always follow these tips to write the plan.
-You should always follow these tips to write the plan.
-You should always follow these tips to write the plan.
-You should always follow these tips to write the plan.
+## 例2
+ジャケットを検索した後、利用可能な検索結果に基づいて計画が更新されます：
 
-## ALWAYS validate what actions are available on the current page before planning steps.
-## ONLY plan actions that can actually be performed based on the visible UI elements and options.
-## If a desired action (like sorting by customer reviews) is not available, adapt your plan accordingly.
+{
+    "rationale": "検索結果にいくつかのジャケットオプションが表示されています。決定を下すために、有望な商品の詳細を表示する必要があります。",
+    "plan": "1. (next) 'Women's Winter Puffer Jacket - Black'の商品詳細を表示する\n2. このジャケットが自分のサイズとスタイルの好みに合うか確認する\n3. 適切であればカートに追加し、そうでなければ次の商品'Lightweight Rain Jacket - Navy'を表示する\n4. ニーズに合う商品が見つかるまで商品の表示を続ける\n5. 選択したジャケットをカートに追加する\n6. チェックアウトに進む\n7. 購入を完了する",
+    "next_step": "'Women's Winter Puffer Jacket - Black'の商品詳細を表示する"
+}
 
-## Step would be actions on the web page, including typing, clicking, etc. Checking, Reading, Reviewing etc are not steps.
-## Step would be actions on the web page, including typing, clicking, etc. Checking, Reading, Reviewing etc are not steps.
-## Step would be actions on the web page, including typing, clicking, etc. Checking, Reading, Reviewing etc are not steps.
-## Step would be actions on the web page, including typing, clicking, etc. Checking, Reading, Reviewing etc are not steps.
-## Step would be actions on the web page, including typing, clicking, etc. Checking, Reading, Reviewing etc are not steps.
-## Step would be actions on the web page, including typing, clicking, etc. Checking, Reading, Reviewing etc are not steps.
+# ヒント：
+計画を書くためには、常にこれらのヒントに従う必要があります。
+計画を書くためには、常にこれらのヒントに従う必要があります。
+計画を書くためには、常にこれらのヒントに従う必要があります。
+計画を書くためには、常にこれらのヒントに従う必要があります。
+
+## ステップを計画する前に、現在のページで利用可能なアクションを常に検証してください。
+## 表示されているUI要素とオプションに基づいて実際に実行できるアクションのみを計画してください。
+## 希望するアクション（顧客レビュー順のソートなど）が利用できない場合は、それに応じて計画を調整してください。
+
+## ステップはWebページ上のアクションであり、入力、クリックなどを含みます。確認、読み取り、レビューなどはステップではありません。
+## ステップはWebページ上のアクションであり、入力、クリックなどを含みます。確認、読み取り、レビューなどはステップではありません。
+## ステップはWebページ上のアクションであり、入力、クリックなどを含みます。確認、読み取り、レビューなどはステップではありません。
+## ステップはWebページ上のアクションであり、入力、クリックなどを含みます。確認、読み取り、レビューなどはステップではありません。
+## ステップはWebページ上のアクションであり、入力、クリックなどを含みます。確認、読み取り、レビューなどはステップではありません。
+## ステップはWebページ上のアクションであり、入力、クリックなどを含みます。確認、読み取り、レビューなどはステップではありません。

@@ -26,50 +26,50 @@ def _load_cfg():
     "--record/--no-record",
     default=False,
     show_default=True,
-    help="Enable or disable session recording.",
+    help="セッションの記録を有効または無効にします。",
 )
 @click.option(
     "--headless/--headed",
     default=False,
     show_default=True,
-    help="Run browser in headless or headed mode.",
+    help="ブラウザをヘッドレスモードまたはヘッドモードで実行します。",
 )
 @click.option(
     "--persona",
-    default="Persona: Clara\nBackground:\nClara is a PhD student in Computer Science at a prestigious university. She is deeply engaged in research focusing on artificial intelligence and machine learning, aiming to contribute to advancements in technology that can benefit society.\n\nDemographics:\n\nAge: 28\nGender: Female\nEducation: Pursuing a PhD in Computer Science\nProfession: PhD student\nIncome: $50,000\n\nFinancial Situation:\nClara lives on her stipend as a PhD student and is careful with her spending. She prefers to save money for research-related expenses and invest in her academic pursuits.\n\nShopping Habits:\nClara dislikes shopping and avoids spending much time browsing through products. She prefers straightforward, efficient shopping experiences and often shops online for convenience. When she does shop, she looks for practicality and affordability over style or trendiness.\nSo Clara wants to shop QUICKLY and EFFICIENTLY.\n\nProfessional Life:\nClara spends most of her time in academia, attending conferences, working in the lab, and writing papers. Her commitment to her research is her main priority, and she manages her time around her academic responsibilities.\n\nPersonal Style:\nClara prefers comfortable, functional clothing, often choosing items that are easy to wear for long hours spent at her desk or in the lab. She wears medium-sized clothing and likes colors that reflect her personality\u2014mostly red, which she finds uplifting and energizing.",
+    default="ペルソナ: Clara\n背景:\nClaraは名門大学でコンピュータサイエンスの博士課程に在籍する学生です。人工知能と機械学習に焦点を当てた研究に深く携わっており、社会に貢献できる技術の進歩に寄与することを目指しています。\n\n人口統計学的情報:\n\n年齢: 28歳\n性別: 女性\n学歴: コンピュータサイエンスの博士課程在籍中\n職業: 博士課程学生\n収入: $50,000\n\n経済状況:\nClaraは博士課程学生としての奨学金で生活しており、支出には慎重です。研究関連の費用のためにお金を貯め、学問的追求に投資することを好みます。\n\n買い物習慣:\nClaraは買い物が嫌いで、商品を閲覧することに多くの時間を費やすことを避けます。彼女は簡潔で効率的なショッピング体験を好み、利便性のためにオンラインでよく買い物をします。買い物をする時は、スタイルやトレンディさよりも実用性と手頃な価格を求めます。\nそのため、Claraは迅速かつ効率的に買い物をしたいと考えています。\n\n職業生活:\nClaraは学術活動にほとんどの時間を費やし、会議に出席し、研究室で作業し、論文を執筆しています。研究への献身が彼女の主な優先事項であり、学術的責任を中心に時間を管理しています。\n\n個人的なスタイル:\nClaraは快適で機能的な衣服を好み、デスクや研究室で長時間着用するのに適したアイテムをよく選びます。彼女はMサイズの衣服を着用し、自分の個性を反映する色を好みます—主に赤色で、これが気分を高揚させ、エネルギーを与えてくれると感じています。",
     show_default=False,
-    help="Persona description string.",
+    help="ペルソナの説明文字列。",
 )
 @click.option(
     "--intent",
-    default="Use amazon's Rufus feature to purchase a gaming mouse",
+    default="AmazonのRufus機能を使用してゲーミングマウスを購入する",
     show_default=False,
-    help="User intent for the agent.",
+    help="エージェントのユーザー意図。",
 )
 @click.option(
     "--start-url",
     default="http://www.amazon.com",
     show_default=True,
-    help="Starting URL for the session.",
+    help="セッションの開始URL。",
 )
 @click.option(
     "--max-steps",
     default=20,
     show_default=True,
     type=int,
-    help="Maximum number of agent steps.",
+    help="エージェントの最大ステップ数。",
 )
 @click.option(
     "--wait-for-login/--no-wait-for-login",
     default=False,
     show_default=True,
-    help="Wait for login to complete before starting the session.",
+    help="セッションを開始する前にログインの完了を待機します。",
 )
 @click.option(
     "--use-user-data-dir/--no-use-user-data-dir",
     default=False,
     show_default=True,
-    help="User data directory for the browser.",
+    help="ブラウザのユーザーデータディレクトリ。",
 )
 def main(
     record: bool,
@@ -82,7 +82,7 @@ def main(
     use_user_data_dir: bool,
 ) -> None:
     """
-    Run the simulated web agent using Click-based CLI options.
+    ClickベースのCLIオプションを使用してシミュレートされたWebエージェントを実行します。
     """
     logging.basicConfig(level=logging.INFO)
     logging.getLogger("LiteLLM").setLevel(logging.WARNING)

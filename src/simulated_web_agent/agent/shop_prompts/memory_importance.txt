@@ -1,38 +1,39 @@
-You are tasked with evaluating the importance of a given memory in helping to achieve a specified intent from the perspective of a provided persona and the current plan (which may be empty).
-Think in first person.
+あなたは、提供されたペルソナと現在の計画（空の場合もあります）の観点から、指定された意図を達成するために与えられた記憶がどれほど重要かを評価することを任されています。
+一人称で考えてください。
 
-You will be given:
-- A memory
-- A persona
-- An intent
-- A current plan (may be empty)
+以下が与えられます：
+- 記憶
+- ペルソナ
+- 意図
+- 現在の計画（空の場合もあります）
 
-Your goal is to assess how crucial the memory is for fulfilling the intent from the persona's point of view, considering the current plan.
+あなたの目標は、現在の計画を考慮して、ペルソナの視点から意図を達成するために記憶がどれほど重要かを評価することです。
 
-Output a score from 1 to 10, where 1 indicates the memory is not important at all and 10 indicates the memory is extremely important.
+1から10のスコアを出力してください。1は記憶が全く重要でないことを示し、10は記憶が極めて重要であることを示します。
 
-Format your output as a JSON:
+出力は以下のJSON形式でフォーマットしてください：
 
 {
-    "rationale": <rationale for the score>,
-    "score": <score from 1 to 10>
+    "rationale": <スコアの根拠>,
+    "score": <1から10のスコア>
 }
-### Examples of Memories
-1. Memory: "The page has a header section that includes a search box, which contains an input field with the name 'header.search_box.search_input' that is currently empty and has no placeholder text."
-   Output:
+
+### 記憶の例
+1. 記憶：「ページには検索ボックスを含むヘッダーセクションがあり、現在空でプレースホルダーテキストのない'header.search_box.search_input'という名前の入力フィールドが含まれています。」
+   出力：
    {
-       "rationale": "This memory is extremely importance because I want to find a product and I will use the search box to find it",
+       "rationale": "この記憶は非常に重要です。なぜなら、私は商品を見つけたいと考えており、それを見つけるために検索ボックスを使用するからです。",
        "score": 9
    }
-2. Memory: "I really need to find a jacket that’s comfortable but also looks professional for conferences. Maybe something in red to keep that energy up?"
-   Output:
+2. 記憶：「会議用に快適だけどプロフェッショナルに見えるジャケットを本当に見つける必要があります。エネルギーを維持するために赤いものはどうでしょうか？」
+   出力：
    {
-       "rationale": "This memory is not important, as it only repeats information that I already know, for example, my preferences.",
+       "rationale": "この記憶は重要ではありません。なぜなら、例えば自分の好みなど、すでに知っている情報を繰り返しているだけだからです。",
        "score": 3
    }
-3. Memory: "The final product showcased is '20 PCS Balls Cake Topper Mini Balloons Cake Topper', which has a 62% rating and is available for $9.49 with an 'Add to Cart' button."
-   Output:
+3. 記憶：「最後に紹介された商品は'20 PCS Balls Cake Topper Mini Balloons Cake Topper'で、評価は62%で、$9.49で'Add to Cart'ボタンが利用可能です。」
+   出力：
    {
-       "rationale": "This memory is not important for the intent of finding a jacket, as it relates to an unrelated product that does not aid in achieving the persona's goal.",
+       "rationale": "この記憶はジャケットを見つけるという意図には重要ではありません。なぜなら、ペルソナの目標達成に役立たない無関係な商品に関連しているからです。",
        "score": 1
    }

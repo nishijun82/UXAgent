@@ -13,12 +13,12 @@ from ..agent import gpt
 logger = logging.getLogger(__name__)
 
 
-# --- ユーティリティ -------------------------------------------------------------------
+# --- utils -------------------------------------------------------------------
 def parse_range(range_str: str) -> tuple[int, int]:
     m = re.match(r"(\d+)\s*-\s*(\d+)", range_str)
     if m:
         return int(m.group(1)), int(m.group(2))
-    raise ValueError(f"無効な範囲形式: '{range_str}'")
+    raise ValueError(f"Invalid range format: '{range_str}'")
 
 
 def prepare_cumulative_distribution(ratio_dict: dict[str, float]):
@@ -37,7 +37,7 @@ def sample_from_cumulative(cumulative):
     for prob, k in cumulative:
         if r <= prob:
             return k
-    return cumulative[-1][1]  # 丸め誤差対策
+    return cumulative[-1][1]  # rounding safety
 
 
 def _prepare_demographics_cumulative(demographics: list[dict[str, Any]]):
@@ -45,7 +45,7 @@ def _prepare_demographics_cumulative(demographics: list[dict[str, Any]]):
     for dim in demographics:
         name = dim.get("name")
         choices = dim.get("choices", [])
-        # 確率を正規化
+        # normalize probabilities
         total = sum(float(c.get("weight", 0.0)) for c in choices) or 1.0
         acc = 0.0
         cumulative: list[tuple[float, str]] = []
@@ -59,7 +59,7 @@ def _prepare_demographics_cumulative(demographics: list[dict[str, Any]]):
     return prepped
 
 
-# 設定ファイルを読み込むヘルパー。提供されていない場合、example personaに必要
+# helper of loading config file. Needed for the example persona if not provided
 def _load_cfg(config_name: str = "base"):
     here = pathlib.Path(__file__).resolve().parent
     conf_dir = here.parents[2] / "conf"
@@ -78,14 +78,14 @@ async def _generate_one(
     sem: asyncio.Semaphore | None = None,
 ):
     r = random.Random(rng_seed) if rng_seed is not None else random.Random()
-    # 各人口統計学的次元の値をサンプリング
+    # sample values for each demographic dimension
     sampled: dict[str, str] = {}
     for attr_name, cum in demographics_cum:
         choice = sample_from_cumulative(cum)
         sampled[attr_name] = str(choice)
 
-    # 多様性のため: いくつかの以前のペルソナを例として選択し、
-    # 生成されたペルソナがそれらから逸脱するようにする
+    # for diversity: pick some previous personas as examples
+    # and ensure the generated persona deviates from those
     if previous_personas:
         num_examples = min(len(previous_personas), 3)
         examples = random.sample(previous_personas, num_examples)
@@ -96,19 +96,19 @@ async def _generate_one(
     persona_msg = [
         {
             "role": "system",
-            "content": f"""あなたは多様なペルソナを生成する有用なアシスタントです。
-                        例:
+            "content": f"""You are a helpful assistant that generates diverse personas.
+                        Examples:
                         {example_text}
                         """,
         },
         {
             "role": "user",
             "content": (
-                "上記の例を使用してペルソナを生成してください。ペルソナは多様性を確保するために以前のペルソナとは異なるものにする必要があります。\n"
-                + "ペルソナは以下の条件を満たす必要があります:\n"
-                + "\n".join([f"- {k}が{v}である" for k, v in sampled.items()])
-                + "\n例と同じ形式でペルソナを提供してください。"
-                + "\nペルソナのみを出力し、他のテキストは出力しないでください。"
+                "Generate a persona using the above examples. The persona should be different from previous personas to ensure diversity.\n"
+                + "The persona should:\n"
+                + "\n".join([f"- have the {k} of {v}" for k, v in sampled.items()])
+                + "\nProvide the persona in the same format as the examples."
+                + "\nOnly output the persona, no other text."
             ),
         },
     ]
@@ -116,14 +116,14 @@ async def _generate_one(
     # intent_msg = lambda persona: [
     #     {
     #         "role": "system",
-    #         "content": "あなたは単一の具体的で実行可能な意図のみを出力し、余分なテキストは出力しません。",
+    #         "content": "You output only a single, specific, actionable intent, no extra text.",
     #     },
     #     {
     #         "role": "user",
     #         "content": (
-    #             f"ペルソナは:\n{persona}\n\n"
-    #             f"一般的な意図'{general_intent}'に基づいて、このペルソナが取るであろう1つの具体的で実行可能な意図 "
-    #             f"を出力してください（例: 購入/比較/予約/選択）。Webサイト上で行動するのに十分な詳細を含めてください。"
+    #             f"The persona is:\n{persona}\n\n"
+    #             f"Based on the general intent '{general_intent}', output ONE concrete, executable intention "
+    #             f"this persona would take (e.g., buy/compare/book/choose), with enough detail to act on a website."
     #         ),
     #     },
     # ]
@@ -137,7 +137,7 @@ async def _generate_one(
     persona = await call_chat(persona_msg)
     # intent = await call_chat(intent_msg(persona))
 
-    # 生成されたペルソナを例のプールに追加
+    # add this generated persona to the example pool
     previous_personas.append(persona)
 
     return {"persona": persona, "intent": general_intent, **sampled}
@@ -154,29 +154,29 @@ async def generate_personas(
     example_text: Optional[str] = None,
 ) -> list[dict[str, str]]:
     """
-    asyncioとasync_chatを使用した並行ペルソナ生成。
+    Concurrent persona generation using asyncio and async_chat.
     """
     demographics_cum = _prepare_demographics_cumulative(demographics)
 
     sem = asyncio.Semaphore(max_concurrency) if max_concurrency else None
 
-    # 基本例、提供されていない場合は設定のものをデフォルトとする
+    # base example, default to the one in config if not provided
     cfg = _load_cfg()
     base_example = cfg.example_persona
     gpt.provider = cfg.llm_provider
 
     if example_text and example_text != "":
-        logger.info("カスタムペルソナ例を使用: " + example_text[:100] + "...")
+        logger.info("Using custom persona example: " + example_text[:100] + "...")
         base_example = example_text
     else:
         logger.info(
-            "カスタムペルソナ例が提供されていません。デフォルトの例を使用して開始します..."
+            "No custom persona example provided. Using the default example to start..."
         )
 
-    # 多様性を確保するために、生成されたペルソナを例として使用するために保存
+    # store generated personas to use as example, ensuring diversity
     previous_personas = []
 
-    # 後で順序を復元できるように、各タスクをそのインデックスでラップする。
+    # Wrap each task with its index so we can restore order later.
     async def _one_indexed(idx: int, seed_i: int | None):
         res = await _generate_one(
             demographics_cum,
@@ -197,7 +197,7 @@ async def generate_personas(
     results: list[dict[str, str]] = [None] * n  # type: ignore
     done = 0
 
-    # 各タスクが完了したら、その結果を記録し、進捗を通知する。
+    # As each task finishes, record its result and ping progress.
     for fut in asyncio.as_completed(tasks):
         idx, res = await fut
         results[idx] = res
@@ -206,6 +206,6 @@ async def generate_personas(
             try:
                 on_progress(done, n)
             except Exception:
-                pass  # 進捗通知はジョブをクラッシュさせてはならない
+                pass  # progress should never crash the job
 
     return results

@@ -1,23 +1,23 @@
-You are tasked with entering a stage called 'wondering,'. You are asked to 'wonder' on behalf of the given persona.
+あなたは「wondering（思案）」と呼ばれる段階に入ることを任されています。与えられたペルソナに代わって「思案する」ことが求められます。
 
-You will be provided with:
-- A persona
-- A memory stream
+以下が提供されます：
+- ペルソナ
+- 記憶ストリーム
 
-Your goal is to think as a human, generating random thoughts that the persona might have at that moment. These thoughts can be related to the context of the memory stream or entirely unrelated (such as pondering what to eat for dinner).
-You should think in the first person.
-You should output the 0 to 3 thoughts.
+あなたの目標は、人間として考え、ペルソナがその瞬間に持つかもしれないランダムな思考を生成することです。これらの思考は記憶ストリームのコンテキストに関連している場合もあれば、完全に無関係な場合もあります（夕食に何を食べようか考えるなど）。
+一人称で考えてください。
+0から3個の思考を出力する必要があります。
 
-Output a series of random thoughts as they would naturally occur in a human mind.
+人間の心の中で自然に発生するような一連のランダムな思考を出力してください。
 
-Format your output as follows JSON:
+出力は以下のJSON形式でフォーマットしてください：
 
 {
     "thoughts": [
-        "<random thought 1>",
-        "<random thought 2>",
+        "<ランダムな思考1>",
+        "<ランダムな思考2>",
         ...
     ]
 }
 
-Feel free to explore a wide range of topics and ideas that might occur to the persona in the moment.
+その瞬間にペルソナに起こりうる幅広いトピックやアイデアを自由に探求してください。

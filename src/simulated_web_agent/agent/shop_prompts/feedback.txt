@@ -1,84 +1,84 @@
-You are tasked with evaluating the success of the **previous action** based on:
-- the **last plan**,
-- the **last action taken** (in the new action schema),
-- and the **new observation** after that action.
+あなたは、以下に基づいて**前のアクション**の成功を評価することを任されています：
+- **最後の計画**、
+- **実行された最後のアクション**（新しいアクションスキーマでの）、
+- そのアクション後の**新しい観察**。
 
-You should think in the **first person** and provide a clear, logical assessment of the action's outcome, along with any additional feedback that may be relevant to the current plan.
+**一人称**で考え、アクションの結果について明確で論理的な評価を提供し、現在の計画に関連する可能性のある追加のフィードバックも提供する必要があります。
 
 ---
 
-## Input Format
+## 入力形式
 
 {
-  "last_plan": "<previous plan here>",
+  "last_plan": "<ここに前の計画>",
   "last_action": {
     "action": "<ACTION_TYPE>",
     "<ACTION_ARGS>": "<ACTION_ARGS>",
-    "description": "<plain text description of the action>"
+    "description": "<アクションの平文での説明>"
   },
-  "new_observation": "<HTML or other observation data here>"
+  "new_observation": "<ここにHTMLまたはその他の観察データ>"
 }
 
 ---
 
-## Output Format
+## 出力形式
 
-Return **only** a single valid JSON object with this shape:
+**単一の有効なJSONオブジェクトのみ**を以下の形式で返してください：
 
 {
   "thoughts": [
-    "An evaluation of whether the action was successful.",
-    "Any feedback or observations that may inform the next action."
+    "アクションが成功したかどうかの評価。",
+    "次のアクションに情報を提供する可能性のあるフィードバックまたは観察。"
   ]
 }
 
-- Use \n for newlines inside strings.
-- Do not add extra commentary or markdown.
-- Always output JSON.
+- 文字列内の改行には\nを使用してください。
+- 余分なコメントやマークダウンを追加しないでください。
+- 常にJSONを出力してください。
 
 ---
 
-## Action Space (New Schema Reference)
+## アクションスペース（新しいスキーマのリファレンス）
 
-- **Click**
+- **Click（クリック）**
 { "action": "click", "target": "<element_name>", "description": "Clicking ..." }
 
-- **Type (with optional Enter submit)**
+- **Type（オプションでEnter送信）**
 { "action": "type", "target": "<input_name>", "text": "<text>", "enter": true, "description": "Typing and submitting ..." }
 
-- **Hover**
+- **Hover（ホバー）**
 { "action": "hover", "target": "<element_name>", "description": "Hovering ..." }
 
-- **Select**
+- **Select（選択）**
 { "action": "select", "target": "<select_name>", "value": "<option_value>", "description": "Selecting ..." }
 
-- **Clear**
+- **Clear（クリア）**
 { "action": "clear", "target": "<input_name>", "description": "Clearing ..." }
 
-- **Key Press**
+- **Key Press（キー押下）**
 { "action": "key_press", "key": "Enter", "target": "<optional_element_name>", "description": "Pressing Enter ..." }
 
-- **Navigation**
+- **Navigation（ナビゲーション）**
 { "action": "goto_url", "url": "https://example.com", "description": "Navigating ..." }
 { "action": "back", "description": "Going back ..." }
 { "action": "forward", "description": "Going forward ..." }
 { "action": "refresh", "description": "Refreshing ..." }
 
-- **Tabs**
+- **Tabs（タブ）**
 { "action": "new_tab", "url": "https://example.com", "description": "Opening in new tab ..." }
 { "action": "switch_tab", "tab_id": 1, "description": "Switching tab ..." }
 { "action": "close_tab", "tab_id": 1, "description": "Closing tab ..." }
 
-- **Terminate**
-{ "action": "terminate", "answer": "<final answer string>", "description": "Terminating ..." }
+- **Terminate（終了）**
+{ "action": "terminate", "answer": "<最終回答文字列>", "description": "Terminating ..." }
 
 ---
 
-## Example
+## 例
 
-### Input
+### 入力
 {
-  "last_plan": "Search for the product, Add to cart, Proceed to checkout",
+  "last_plan": "商品を検索する、カートに追加する、チェックアウトに進む",
   "last_action": {
     "action": "type",
     "target": "search_input",
@@ -89,10 +89,10 @@ Return **only** a single valid JSON object with this shape:
   "new_observation": "<HTML showing search results for 'laptop'>"
 }
 
-### Output
+### 出力
 {
   "thoughts": [
-    "The typing and submit action was successful, as the new observation shows search results for 'laptop'.",
-    "Proceed to the next step: 'Add to cart'."
+    "入力と送信アクションは成功しました。新しい観察は'laptop'の検索結果を示しています。",
+    "次のステップに進みます：'カートに追加する'。"
   ]
 }

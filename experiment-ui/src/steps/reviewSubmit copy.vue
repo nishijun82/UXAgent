@@ -2,27 +2,27 @@
   <n-card>
     <!-- Persona Summary -->
     <n-card size="small" bordered class="mb-3">
-      <template #header>参加者の募集</template>
+      <template #header>Participant Recruitment</template>
 
       <n-descriptions :column="1" label-placement="top" bordered>
-        <n-descriptions-item label="参加者数">
+        <n-descriptions-item label="# of Participants">
           {{ form?.persona?.numSubjects ?? "—" }}
         </n-descriptions-item>
-        <n-descriptions-item label="参加者のタスク">
+        <n-descriptions-item label="Participant Task">
           {{ form?.persona?.generalIntent || "—" }}
         </n-descriptions-item>
         <n-descriptions-item
-          label="ペルソナの例"
+          label="Example Persona"
           v-if="form?.persona?.examplePersona"
         >
           {{ form?.persona?.examplePersona }}
         </n-descriptions-item>
       </n-descriptions>
 
-      <n-divider class="my-3">人口統計学的情報</n-divider>
+      <n-divider class="my-3">Demographics</n-divider>
 
       <n-alert v-if="demoTabs.length === 0" type="warning">
-        人口統計学的情報が設定されていません。
+        No demographics configured.
       </n-alert>
 
       <n-tabs v-else type="segment">
@@ -30,7 +30,7 @@
           v-for="(tab, idx) in demoTabs"
           :key="idx"
           :name="tab.name || `field_${idx + 1}`"
-          :tab="tab.name || `フィールド ${idx + 1}`"
+          :tab="tab.name || `Field ${idx + 1}`"
         >
           <n-data-table :columns="distColumns" :data="tab.rows" size="small" />
         </n-tab-pane>
@@ -39,15 +39,15 @@
 
     <!-- Experiment Summary -->
     <n-card size="small" bordered class="mb-3">
-      <template #header>実験</template>
+      <template #header>Experiment</template>
       <n-descriptions :column="1" label-placement="left" bordered>
-        <n-descriptions-item label="テスト対象のWebサイトURL">
+        <n-descriptions-item label="URL of Website Being Tested">
           {{ form?.experiment?.startUrl || "—" }}
         </n-descriptions-item>
-        <n-descriptions-item label="最大ステップ数">
+        <n-descriptions-item label="Max Steps">
           {{ form?.experiment?.maxSteps ?? "—" }}
         </n-descriptions-item>
-        <n-descriptions-item label="並列エージェント数">
+        <n-descriptions-item label="# of Parellel Agents">
           {{ form?.experiment?.concurrency ?? "—" }}
         </n-descriptions-item>
       </n-descriptions>
@@ -55,21 +55,22 @@
 
     <!-- Survey (minimal view) -->
     <n-card size="small" bordered class="mb-3">
-      <template #header>アンケート</template>
+      <template #header>Questionnaire</template>
 
       <!-- Invalid JSON -->
       <n-alert
         v-if="!questionnaireObject"
         type="error"
-        title="アンケートのJSONが無効です"
+        title="Invalid Questionnaire JSON"
         class="mb-2"
       >
-        <code>form.survey.questionnaire</code>を解析できませんでした。アンケートページに戻って修正してください。
+        Could not parse <code>form.survey.questionnaire</code>. Go back to
+        Survey to fix it.
       </n-alert>
 
       <!-- Empty -->
       <n-alert v-else-if="qCount === 0" type="warning" class="mb-2">
-        質問が設定されていません。
+        No questions configured.
       </n-alert>
 
       <!-- Questions list -->
@@ -78,13 +79,13 @@
           <div class="q-row">
             <div class="q-num">Q{{ item.idx }}</div>
             <div class="q-main">
-              <div class="q-prompt">{{ item.prompt || "(質問なし)" }}</div>
+              <div class="q-prompt">{{ item.prompt || "(no prompt)" }}</div>
               <div class="q-meta">
                 <n-tag size="small" type="info">
                   {{
                     item.type === "multiple_choice"
-                      ? "多肢選択"
-                      : "自由記述"
+                      ? "Multiple Choice"
+                      : "Short Text"
                   }}
                 </n-tag>
 
@@ -92,7 +93,7 @@
                   v-if="item.type === 'multiple_choice' && item.options.length"
                 >
                   <div class="row">
-                    <span class="opts-label">選択肢:</span>
+                    <span class="opts-label">Options:</span>
                   </div>
                   <ul>
                     <li v-for="(opt, i) in item.options" :key="i">
@@ -112,11 +113,11 @@
     <template #action>
       <div class="card-nav">
         <n-button tertiary @click="nav?.prev?.()" :disabled="submitting">
-          <n-icon><MdArrowRoundBack /></n-icon> 戻る
+          <n-icon><MdArrowRoundBack /></n-icon> Back
         </n-button>
         <div class="right-actions">
           <n-button type="success" @click="submit" :loading="submitting">
-            確認して実行
+            Confirm and Run
           </n-button>
         </div>
       </div>
@@ -147,7 +148,7 @@ function listToRows(list: { name: string; weight: number }[] = []): DistRow[] {
 
   return list
     .map((c, idx) => ({
-      group: c?.name || "(名前なし)",
+      group: c?.name || "(unnamed)",
       weight: percents[idx],
     }))
     .sort((a, b) => b.weight - a.weight);
@@ -155,9 +156,9 @@ function listToRows(list: { name: string; weight: number }[] = []): DistRow[] {
 
 /** Columns with a progress bar cell */
 const distColumns = [
-  { title: "グループ", key: "group" },
+  { title: "Group", key: "group" },
   {
-    title: "確率",
+    title: "Probability",
     key: "weight",
     width: 240,
     render(row: DistRow) {
@@ -189,7 +190,7 @@ const questionnaireObject = computed(() => {
 
 const questionnaireParseError = computed(() => {
   const txt = form?.survey?.questionnaire ?? "";
-  if (!txt?.trim()) return "アンケートが空です";
+  if (!txt?.trim()) return "Questionnaire is empty";
   try {
     JSON.parse(txt);
     return "";
@@ -237,15 +238,15 @@ async function submit() {
     nav?.finish?.();
   } catch (e: any) {
     console.error(e);
-    dialog.error(`送信に失敗しました: ${e?.message ?? e}`);
+    dialog.error(`Submit failed: ${e?.message ?? e}`);
   } finally {
     submitting.value = false;
   }
 
   dialog.success({
-    title: "調査が正常に作成されました！",
+    title: "Study Successfully Created!",
     content:
-      "調査はバックグラウンドで実行中です。",
+      "Study is now running in the background.",
   });
 }
 </script>

@@ -1,10 +1,11 @@
 <template>
-  <n-card title="事後アンケート" size="large">
+  <n-card title="Post Study Survey" size="large">
     <p class="mb-2">
-      システムとのインタラクション後にすべてのLLMエージェント参加者が回答する必要があるアンケートを設計してください。
+      Design the questionnaire that every LLM Agent participant need to complete
+      after interacting with the system.
     </p>
 
-    <n-divider>質問</n-divider>
+    <n-divider>Questions</n-divider>
 
     <!-- Empty state -->
     <n-alert
@@ -12,7 +13,7 @@
       type="info"
       class="mb-2"
     >
-      まだ質問がありません。
+      No questions yet.
     </n-alert>
 
     <n-form ref="formRef" :model="questionsForm">
@@ -23,40 +24,40 @@
           :key="q.uid"
           size="small"
           :title="`Q${i + 1} — ${
-            q.type === 'short_text' ? '自由記述' : '多肢選択'
+            q.type === 'short_text' ? 'Open Ended' : 'Multiple Choice'
           }`"
           class="q-card"
         >
           <div class="field">
             <n-form-item
-              label="タイプ"
+              label="Type"
               :path="`questions[${i}].type`"
               :rule="{
                 required: true,
-                message: 'タイプを選択してください',
+                message: 'Please select the type',
               }"
               :show-feedback="false"
             >
               <n-radio-group v-model:value="q.type" size="small">
-                <n-radio value="short_text">自由記述</n-radio>
-                <n-radio value="multiple_choice">多肢選択</n-radio>
+                <n-radio value="short_text">Open Ended</n-radio>
+                <n-radio value="multiple_choice">Multiple Choice</n-radio>
               </n-radio-group>
             </n-form-item>
           </div>
 
           <div class="field">
             <n-form-item
-              label="質問"
+              label="Question"
               :path="`questions[${i}].prompt`"
               :rule="{
                 required: true,
-                message: '質問を入力してください',
+                message: 'Please input the question',
                 trigger: ['input', 'blur'],
               }"
             >
               <n-input
                 v-model:value="questionsForm.questions[i].prompt"
-                placeholder="質問を入力してください…"
+                placeholder="Enter the question…"
                 clearable
               />
             </n-form-item>
@@ -64,7 +65,7 @@
 
           <div class="field" v-if="q.type === 'multiple_choice'">
             <label class="n-form-item-label n-form-item-label--right-mark"
-              ><span class="n-form-item-label__text">選択肢</span
+              ><span class="n-form-item-label__text">Options</span
               ><span style="color: rgb(208, 48, 80)">&nbsp;*</span></label
             >
             <n-form-item
@@ -73,7 +74,7 @@
               :path="`questions[${i}].options[${option_index}]`"
               :rule="{
                 required: true,
-                message: '選択肢を入力してください',
+                message: 'Please input the option',
                 trigger: ['input', 'blur'],
               }"
               :show-label="false"
@@ -81,7 +82,7 @@
             >
               <n-input
                 v-model:value="q.options[option_index]"
-                placeholder="選択肢を追加、Enterキーでさらに追加"
+                placeholder="Add option, press Enter to add more"
                 @keydown.enter="addOption(i, option_index)"
                 :ref="(el) => (questionRefs[`${i}-${option_index}`] = el)"
               >
@@ -111,9 +112,9 @@
             <div class="actions">
               <n-popconfirm @positive-click="removeQuestion(i)">
                 <template #trigger>
-                  <n-button tertiary type="error">削除</n-button>
+                  <n-button tertiary type="error">Remove</n-button>
                 </template>
-                この質問を削除しますか？
+                Remove this question?
               </n-popconfirm>
             </div>
           </template>
@@ -124,13 +125,13 @@
     <!-- Add question toolbar -->
     <div class="add-toolbar">
       <n-button @click="addShortText" secondary
-        >+ 自由記述質問を追加</n-button
+        >+ Add Open-ended Question</n-button
       >
       <n-button @click="addMultipleChoice" secondary
-        >+ 多肢選択質問を追加</n-button
+        >+ Add Multiple Choice</n-button
       >
       <n-button @click="addSUS" secondary
-        >+ システムユーザビリティスケールを追加</n-button
+        >+ Add System Usability Scale</n-button
       >
       <!-- <n-space />
       <n-upload
@@ -138,19 +139,19 @@
         accept="application/json"
         @change="handleLoadFile"
       >
-        <n-button quaternary>JSONから読み込む</n-button>
+        <n-button quaternary>Load from JSON</n-button>
       </n-upload>
-      <n-button quaternary @click="saveToFile">JSONとして保存</n-button> -->
+      <n-button quaternary @click="saveToFile">Save as JSON</n-button> -->
     </div>
 
     <template #action>
       <div class="card-nav">
         <n-button tertiary @click="nav.prev">
-          <n-icon><MdArrowRoundBack /></n-icon> 戻る
+          <n-icon><MdArrowRoundBack /></n-icon> Back
         </n-button>
         <n-space>
           <n-button type="primary" @click="handleNext">
-            次へ <n-icon><MdArrowRoundForward /></n-icon>
+            Next <n-icon><MdArrowRoundForward /></n-icon>
           </n-button>
         </n-space>
       </div>
@@ -188,7 +189,7 @@ const formRef = ref<FormInst>();
 
 // ---------- Local builder state ----------
 const questionnaireId = ref<string>("web_shopping_experience_v1");
-const title = ref<string>("無題のアンケート");
+const title = ref<string>("Untitled Survey");
 // const questions = ref<UIQuestion[]>([]);
 const questionsForm = ref<{ questions: UIQuestion[] }>({ questions: [] });
 let uidCounter = 1;
@@ -222,16 +223,16 @@ function addMultipleChoice() {
 }
 function addSUS() {
   const susStatements = [
-    "このシステムを頻繁に使用したいと思う。(1 = 全く同意しない、5 = 強く同意する)",
-    "このシステムは不必要に複雑だと感じた。(1 = 全く同意しない、5 = 強く同意する)",
-    "このシステムは使いやすいと思った。(1 = 全く同意しない、5 = 強く同意する)",
-    "このシステムを使用するには技術者のサポートが必要だと思う。(1 = 全く同意しない、5 = 強く同意する)",
-    "このシステムの様々な機能がうまく統合されていると感じた。(1 = 全く同意しない、5 = 強く同意する)",
-    "このシステムには一貫性がなさすぎると思った。(1 = 全く同意しない、5 = 強く同意する)",
-    "ほとんどの人がこのシステムの使い方をすぐに学べると想像する。(1 = 全く同意しない、5 = 強く同意する)",
-    "このシステムは非常に使いにくいと感じた。(1 = 全く同意しない、5 = 強く同意する)",
-    "このシステムを使用することに非常に自信を持てた。(1 = 全く同意しない、5 = 強く同意する)",
-    "このシステムを使い始める前に多くのことを学ぶ必要があった。(1 = 全く同意しない、5 = 強く同意する)",
+    "I think that I would like to use this system frequently. (1 = Strongly Disagree, 5 = Strongly Agree)",
+    "I found the system unnecessarily complex. (1 = Strongly Disagree, 5 = Strongly Agree)",
+    "I thought the system was easy to use. (1 = Strongly Disagree, 5 = Strongly Agree)",
+    "I think that I would need the support of a technical person to be able to use this system. (1 = Strongly Disagree, 5 = Strongly Agree)",
+    "I found the various functions in this system were well integrated. (1 = Strongly Disagree, 5 = Strongly Agree)",
+    "I thought there was too much inconsistency in this system. (1 = Strongly Disagree, 5 = Strongly Agree)",
+    "I would imagine that most people would learn to use this system very quickly. (1 = Strongly Disagree, 5 = Strongly Agree)",
+    "I found the system very cumbersome to use. (1 = Strongly Disagree, 5 = Strongly Agree)",
+    "I felt very confident using the system. (1 = Strongly Disagree, 5 = Strongly Agree)",
+    "I needed to learn a lot of things before I could get going with this system. (1 = Strongly Disagree, 5 = Strongly Agree)",
   ];
   const likertOptions = [
     "1",

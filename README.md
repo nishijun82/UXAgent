@@ -1,4 +1,4 @@
-<h1 align="center"> UXAgent: A System for Simulating Usability Testing of Web Design with LLM </h1>
+# UXAgent: LLMを用いたウェブデザインのユーザビリティテストをシミュレートするシステム
 
 <p align="center">
     <a href="https://arxiv.org/abs/2504.09407">
@@ -17,18 +17,17 @@ Yuxuan Lu, Bingsheng Yao, Hansu Gu, Jing Huang, Jessie Wang, Laurence Li, Haiyan
     <img src="/figures/teaser.png" width="100%">
 </p>
 
+## 概要
 
-## Overview
-**UXAgent** is a framework that uses Large Language Models (LLMs) as agents to conduct usability testing in web environments. These agents simulate human-like behaviors, allowing UX researchers to:
-- Perform early usability evaluations.
-- Gather actionable design insights.
-- Iterate without immediate reliance on human participants.
+**UXAgent**は、Large Language Models（LLM）をエージェントとして使用し、ウェブ環境でユーザビリティテストを実施するフレームワークです。これらのエージェントは人間のような行動をシミュレートし、UXリサーチャーが以下を実現できるようにします：
 
-The system leverages dual-system reasoning for quick decisions and in-depth analysis, and its **Universal Web Connector** ensures compatibility with any web page. By offering real-time feedback, UXAgent streamlines the design process and improves testing efficiency.
+- 早期のユーザビリティ評価を実施
+- 実行可能なデザインインサイトを収集
+- 人間の参加者に即座に依存することなく反復作業を行う
 
+このシステムは、迅速な意思決定と詳細な分析のために二重システム推論を活用し、**Universal Web Connector**により、あらゆるウェブページとの互換性を確保しています。リアルタイムのフィードバックを提供することで、UXAgentはデザインプロセスを効率化し、テスト効率を向上させます。
 
 https://github.com/user-attachments/assets/8f4b352b-1c36-4b16-9d83-b39046357c40
-
 
 <p align="center">
     <a href="https://uxagent.hailab.io/"> 
@@ -39,30 +38,28 @@ https://github.com/user-attachments/assets/8f4b352b-1c36-4b16-9d83-b39046357c40
     </a>
 </p>
 
-
-
 ---
 
-## Installation
+## インストール
 
-1. **Clone the repository:**
+1. **リポジトリをクローン:**
    ```bash
    git clone git@github.com:neuhai/UXAgent.git
    ```
 
-2. install uv, follow [this guide](https://docs.astral.sh/uv/getting-started/installation/)
+2. **uvをインストール**（[このガイド](https://docs.astral.sh/uv/getting-started/installation/)に従ってください）
 
-3. **Set up the environment:**
+3. **環境をセットアップ:**
    ```bash
    uv sync
    ```
 
-4. **Install Chromium for Playwright:**
+4. **Playwright用のChromiumをインストール:**
    ```bash
    uv run playwright install chromium
    ```
 
-5. **Set API keys:**
+5. **APIキーを設定:**
    ```bash
    # export AWS_ACCESS_KEY_ID=xxx123
    # export AWS_SECRET_ACCESS_KEY=xxx123
@@ -70,128 +67,147 @@ https://github.com/user-attachments/assets/8f4b352b-1c36-4b16-9d83-b39046357c40
    export ANTHROPIC_API_KEY=sk-ant-123
    ```
 
-6. **Optional: Enable "headful" mode:**
-   By default, Chrome runs in headless mode (no GUI). To view the browser, set the following:
+6. **オプション: "headful"モードを有効化:**
+   
+   デフォルトでは、Chromeはヘッドレスモード（GUIなし）で実行されます。ブラウザを表示するには、以下を設定してください：
    ```bash
    export HEADLESS=false
    ```
 
 ---
 
-## Quick Start
+## クイックスタート
 
-### Running a single agent from the command line
+### コマンドラインから単一のエージェントを実行
 
 ```bash
 uv run -m src.simulated_web_agent.main --intent "Buy a Jacket from Amazon" --start-url "https://www.amazon.com" --max-steps 20 --wait-for-login
 ```
 
-For more options, see the help message:
+その他のオプションについては、ヘルプメッセージを参照してください：
 
 ```bash
 uv run -m src.simulated_web_agent.main --help
 ```
 
-### Running multiple agents (batch mode) from the command line
+### コマンドラインから複数のエージェントを実行（バッチモード）
 
 ```bash
 uv run -m src.simulated_web_agent.main.run
 ```
-`runConfig.yaml` defines how **multiple simulated agents** are launched and what behavior or survey the agents performs during a batch run. Refer to this following table for how to use the fields in `runConfig.yaml`.
 
-| Field               | Description                                                                                                                                                            |
+`runConfig.yaml`は、バッチ実行中に**複数のシミュレートされたエージェント**がどのように起動されるか、およびエージェントが実行する行動やアンケートを定義します。`runConfig.yaml`のフィールドの使用方法については、以下の表を参照してください。
+
+| フィールド | 説明 |
 |---------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **total_personas**  | The total number of virtual agents (personas) to spawn during the batch run. Each persona represents one simulated user.                                               |
-| **concurrency**     | The number of agents to run in parallel (e.g., `10` for up to 10 simultaneous browser sessions).                                                                       |
-| **demographics**    | Defines sampling categories (e.g., age, gender, shopping frequency) and their relative weights. Each persona randomly samples from these weighted options.             |
-| **general_intent**  | A shot, plain-English instruction describing the overall shopping or web browsing goal for all agents.                                                                 |
-| **example_persona** | A template persona profile (background, finances, habits, etc.) used to generate diverse personas. All generated personas will follow the same formate as the example. |
-| **start_url**       | The base URL where each agent begins the simulated session.                                                                                                            |
-| **max_steps**       | The maximum number of actions (clicks, navigations, form fills, etc.) an agent may perform before stopping.                                                            |
-| **questionnaire**   | A post-run usability survey shown to each agent, defined with metadata (`id`, `title`) and a list of questions (with type, prompt, and options).                       |
+| **total_personas**  | バッチ実行中に生成する仮想エージェント（ペルソナ）の総数。各ペルソナは1人のシミュレートされたユーザーを表します。 |
+| **concurrency**     | 並行して実行するエージェントの数（例：`10`で最大10の同時ブラウザセッション）。 |
+| **demographics**    | サンプリングカテゴリ（年齢、性別、買い物頻度など）とその相対的な重みを定義します。各ペルソナはこれらの重み付けされたオプションからランダムにサンプリングされます。 |
+| **general_intent**  | すべてのエージェントの全体的なショッピングまたはウェブブラウジングの目標を説明する、短く平易な英語の指示。 |
+| **example_persona** | 多様なペルソナを生成するために使用されるテンプレートペルソナプロファイル（背景、財務状況、習慣など）。生成されたすべてのペルソナは、例と同じ形式に従います。 |
+| **start_url**       | 各エージェントがシミュレートされたセッションを開始するベースURL。 |
+| **max_steps**       | エージェントが停止する前に実行できるアクション（クリック、ナビゲーション、フォーム入力など）の最大数。 |
+| **questionnaire**   | 各エージェントに表示される実行後のユーザビリティアンケート。メタデータ（`id`、`title`）と質問のリスト（タイプ、プロンプト、オプション付き）で定義されます。 |
 
-Example `runConfig.yaml` you can get started with:
+以下は、始めるための`runConfig.yaml`の例です：
 
 ```yaml
-# Number of personas and concurrency
+# ペルソナの数と並行性
 total_personas: 20
 concurrency: 10
 
-# Demographic sampling (weighted random)
+# 人口統計的サンプリング（重み付けランダム）
 demographics:
-  - name: "Age"
+  - name: "年齢"
     choices:
       - { name: "18-55", weight: 1 }
-  - name: "Gender"
+  - name: "性別"
     choices:
-      - { name: "male", weight: 1 }
-      - { name: "female", weight: 1 }
-      - { name: "non-binary", weight: 1 }
-  - name: "Online Shopping Frequency"
+      - { name: "男性", weight: 1 }
+      - { name: "女性", weight: 1 }
+      - { name: "ノンバイナリー", weight: 1 }
+  - name: "オンラインショッピング頻度"
     choices:
-      - { name: "A few times per year", weight: 1 }
-      - { name: "A few times per month", weight: 1 }
-      - { name: "A few times per week", weight: 1 }
+      - { name: "年に数回", weight: 1 }
+      - { name: "月に数回", weight: 1 }
+      - { name: "週に数回", weight: 1 }
 
-# The general shopping intent for all agents
-general_intent: Buy the highest rated product from the meat substitute category within a budget between 100 and 200. You don't need to finish the purchase, just go to the checkout page.
+# すべてのエージェントの一般的なショッピング意図
+general_intent: 予算100から200の範囲内で、肉代替品カテゴリーから最高評価の製品を購入してください。購入を完了する必要はなく、チェックアウトページまで進んでください。
 
-# Example persona template for generation reference
+# 生成参照用のペルソナテンプレート例
 example_persona: |
-  Background:
-    Male, age 35-44, tech professional, lives in New Jersey.
-  Financial Situation:
-    Stable income, careful with expenses.
-  Shopping Habits:
-    Shops online twice a month, prefers Amazon Prime, brand-loyal but open-minded.
-  Professional Life:
-    Works full-time in tech; balanced lifestyle with family time and hobbies.
+  背景:
+    男性、35-44歳、テクノロジー専門職、ニュージャージー在住。
+  財務状況:
+    安定した収入、支出には慎重。
+  買い物習慣:
+    月に2回オンラインで買い物、Amazon Primeを好む、ブランドに忠実だが柔軟。
+  職業生活:
+    テクノロジー業界でフルタイム勤務、家族との時間と趣味とのバランスの取れたライフスタイル。
 
-# Starting point for the browser agent
+# ブラウザエージェントの開始地点
 start_url: http://52.91.223.130:7770/
 
-# Maximum allowed agent actions
+# 許可されるエージェントアクションの最大数
 max_steps: 50
 
-# Post-run questionnaire definition
+# 実行後のアンケート定義
 questionnaire:
   questionnaire_id: web_shopping_usability_v1
-  title: System Usability Survey
+  title: システムユーザビリティ調査
   questions:
     - id: q1
       type: multiple_choice
-      prompt: "I think that I would like to use this system frequently. (1 = Strongly disagree, 5 = Strongly agree)"
+      prompt: "このシステムを頻繁に使用したいと思います。(1 = 強く反対, 5 = 強く同意)"
+      options: ["1", "2", "3", "4", "5"]
+    - id: q2
+      type: multiple_choice
+      prompt: "このシステムは不必要に複雑だと思いました。(1 = 強く反対, 5 = 強く同意)"
+      options: ["1", "2", "3", "4", "5"]
+    - id: q3
+      type: multiple_choice
+      prompt: "このシステムは使いやすかったです。(1 = 強く反対, 5 = 強く同意)"
+      options: ["1", "2", "3", "4", "5"]
+    - id: q4
+      type: multiple_choice
+      prompt: "このシステムを使用するには技術者のサポートが必要だと思いました。(1 = 強く反対, 5 = 強く同意)"
+      options: ["1", "2", "3", "4", "5"]
+    - id: q5
+      type: multiple_choice
+      prompt: "このシステムの様々な機能はよく統合されていました。(1 = 強く反対, 5 = 強く同意)"
       options: ["1", "2", "3", "4", "5"]
 ```
 
-### Using the quick experiment setup UI for multiple agents mode
+### 複数エージェントモード用のクイック実験セットアップUIの使用
 
-In addition to configuring batch runs through `runConfig.yaml`, you can also use the **web-based quick experiment setup UI** to launch and manage multiple agents visually.
-This interface allows you to adjust parameters such as total personas, concurrency, and intent directly from the browser without manually editing YAML files.
+`runConfig.yaml`を通じてバッチ実行を設定するだけでなく、**Webベースのクイック実験セットアップUI**を使用して、複数のエージェントを視覚的に起動および管理することもできます。このインターフェースを使用すると、YAMLファイルを手動で編集することなく、ブラウザから直接、総ペルソナ数、並行性、意図などのパラメータを調整できます。
 
-1. Have **flask** and **Node.js / npm** installed
-2. From the project root:
+1. **flask**と**Node.js / npm**をインストール
+2. プロジェクトのルートから：
    ```bash
    uv run -m src.simulated_web_agent.main.app
    ```
-3. Boot up the interface
+3. インターフェースを起動：
    ```bash
    cd experiment_ui
    npm install
    npm run dev
    ```
-4. You can configure your multi-agent run through the experiment configuration wizard in the interface. (set participant demographics, modify task, edit survey, etc.)
-Click "Confirm and Run" in the UI to start the custom configured multi-agent run.
+4. インターフェース内の実験設定ウィザードを通じて、マルチエージェント実行を設定できます（参加者の人口統計の設定、タスクの修正、アンケートの編集など）。UIで「Confirm and Run」をクリックして、カスタム設定されたマルチエージェント実行を開始します。
 
-## Results & Data Artifacts
-After running a simulation with UXAgent, you’ll find a structured output folder `runs/<timestamp>` containing logs, session traces, screenshots, and aggregate metrics.
+## 結果とデータ成果物
+
+UXAgentでシミュレーションを実行すると、ログ、セッショントレース、スクリーンショット、集計メトリクスを含む構造化された出力フォルダ`runs/<timestamp>`が生成されます。
 
 ---
-## License
-This project is licensed under the [MIT License](https://opensource.org/licenses/MIT).
 
+## ライセンス
 
-## Citation
+このプロジェクトは[MITライセンス](https://opensource.org/licenses/MIT)の下でライセンスされています。
+
+## 引用
+
 ```bibtex
 @article{lu2025uxagent,
   title={UXAgent: A System for Simulating Usability Testing of Web Design with LLM Agents},
